@@ -1,31 +1,40 @@
-class User {
-  final int id;
-  final String imageUrl;
-  final String name;
-  final int score;
+import 'package:cloud_firestore/cloud_firestore.dart';
 
-  User({
-    required this.id,
-    required this.imageUrl,
-  required this.name,
-    required this.score,
+class Users {
+  final int? id;
+  final String? imageUrl;
+  final String? name;
+  final String email;
+  final String? password;
+  final int? score;
+
+  Users({
+   this.id,
+    this.imageUrl,
+    this.name,
+    required this.email,
+    this.password,
+    this.score,
   });
 
   Map<String, dynamic> toJson() {
     return {
-      'id': id,
-      'imageUrl': imageUrl,
       'name': name,
+      "email": email,
+      "password": password,
       'score': score,
     };
   }
 
-  factory User.fromJson(Map<String, dynamic> json) {
-    return User(
-      id: json['id'] as int,
-      imageUrl: json['imageUrl'] as String,
-      name: json['name'] as String,
-      score: json['score'] as int,
+  factory Users.fromSnapshot(DocumentSnapshot<Map<dynamic, dynamic>?> document) {
+     final data = document.data()!;
+    return Users(
+      id: int.parse(document.id),
+      imageUrl: data['imageUrl'],
+      name: data['name'],
+      email: data['Email'],
+      password: data['Password'],
+      score: data['score'] as int,
     );
   }
 }

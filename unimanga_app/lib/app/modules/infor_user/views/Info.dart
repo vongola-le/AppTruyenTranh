@@ -1,6 +1,8 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:unimanga_app/app/constants/index.dart';
+import 'package:unimanga_app/app/modules/signin/views/signin.dart';
 
 class InfoScreen extends StatefulWidget {
   const InfoScreen({super.key});
@@ -10,6 +12,16 @@ class InfoScreen extends StatefulWidget {
 }
 
 class _InfoScreenState extends State<InfoScreen> {
+  Future<void> logout(BuildContext context) async {
+    await FirebaseAuth.instance.signOut();
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(
+        builder: (context) => Login_Screen(),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -36,8 +48,7 @@ class _InfoScreenState extends State<InfoScreen> {
                       ListTile(
                         leading: CircleAvatar(
                           child: Image(
-                            image:
-                                AssetImage(AppImages.bannerAdvDasboard),
+                            image: AssetImage(AppImages.bannerAdvDasboard),
                           ),
                           radius: 30.0,
                         ),
@@ -102,6 +113,26 @@ class _InfoScreenState extends State<InfoScreen> {
                         },
                         icon: Icon(Icons.add), //icon data for elevated button
                         label: Text("Elevated Button 2"), //label text
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors
+                              .blueAccent, //elevated btton background color
+                          minimumSize: Size(double.infinity, 50),
+                          shape: RoundedRectangleBorder(
+                            borderRadius:
+                                BorderRadius.zero, // Đặt bo góc bằng 0
+                          ),
+                          alignment: Alignment.centerLeft,
+                        ),
+                      ),
+                    ),
+                    SizedBox(width: 1.0), // Khoảng cách giữa các nút
+                    Expanded(
+                      child: ElevatedButton.icon(
+                        onPressed: () {
+                          logout(context);
+                        },
+                        icon: Icon(Icons.add), //icon data for elevated button
+                        label: Text("Đăng xuất"), //label text
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors
                               .blueAccent, //elevated btton background color

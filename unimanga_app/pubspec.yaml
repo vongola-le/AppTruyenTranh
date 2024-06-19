@@ -42,8 +42,12 @@ dependencies:
   firebase_core: ^2.32.0
   firebase_storage: ^11.7.7
   image_picker: ^1.1.2
+  firebase_auth: ^4.15.3
+  cloud_firestore: ^4.13.6
   firebase_database: ^10.5.7
+  google_sign_in: ^6.1.6
   dio: ^5.4.3+1
+  lottie: ^3.0.0
 
 dev_dependencies:
   flutter_test:
@@ -72,6 +76,7 @@ flutter:
     - assets/images/logo/
     - assets/images/icons/
     - assets/images/background/
+    - assets/animations/
   fonts:
     - family: Montserrat
       fonts:

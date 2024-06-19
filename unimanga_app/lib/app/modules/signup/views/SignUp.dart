@@ -1,19 +1,31 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:lottie/lottie.dart';
 import 'package:unimanga_app/app/constants/index.dart';
+import 'package:unimanga_app/app/modules/signin/provider/signin_provider.dart';
+import 'package:unimanga_app/app/modules/signup/bindings/signup_bindings.dart';
+import 'package:unimanga_app/app/modules/signup/controllers/signup_controller.dart';
+import 'package:unimanga_app/app/modules/signup/provider/signup_provider.dart';
+import 'package:unimanga_app/app/modules/signup/repository/signup_repository.dart';
 
-import '../../list_ranking/views/SignIn.dart';
+import '../../../models/user.dart';
+import '../../signin/views/signin.dart';
+import '../provider/signup_failer.dart';
 
 class SignUp extends StatefulWidget {
   const SignUp({super.key});
 
   @override
   State<SignUp> createState() => _SignUpState();
+
+  
 }
 
 class _SignUpState extends State<SignUp> with SingleTickerProviderStateMixin {
   final _frmkey = GlobalKey<FormState>();
-  // final _user = Get.put(UserController());
+
+
+  final _user = Get.find<SignupProvider>();
   final TextEditingController nameController = new TextEditingController();
   final TextEditingController addressController = new TextEditingController();
   final TextEditingController emailController = new TextEditingController();
@@ -21,7 +33,6 @@ class _SignUpState extends State<SignUp> with SingleTickerProviderStateMixin {
 
   bool showProgress = false;
   bool _obscureText = true;
-  bool? isChecked = false;
   late AnimationController controller;
 
   @override
@@ -35,41 +46,36 @@ class _SignUpState extends State<SignUp> with SingleTickerProviderStateMixin {
         controller.reset();
       }
     });
+    
   }
 
   @override
   void dispose() {
     controller.dispose();
     super.dispose();
+    
   }
 
-  // void signUp() async {
-  //   final user = Users(
-  //       fullName: nameController.text.trim(),
-  //       address: {
-  //         "Home": addressController.text.trim(),
-  //         "Company": null,
-  //         "Etc": null,
-  //       },
-  //       email: emailController.text.trim(),
-  //       password: passwordController.text.trim(),
-  //       agree: isChecked);
-  //   if (!_frmkey.currentState!.validate()) {
-  //     showFailureDialog();
-  //   } else {
-  //     if (isChecked == true) {
-  //       try {
-  //         await _user.createUser(user);
-  //       } on SignUp_AccountFailure catch (e) {
-  //         showFailureDialog(message: e.message);
-  //       } catch (_) {
-  //         showFailureDialog();
-  //       }
-  //     } else {
-  //       showCheckBoxDialog();
-  //     }
-  //   }
-  // }
+  void signUp() async {
+    final user = Users(
+      imageUrl: null,
+      name: nameController.text.trim(),
+      email: emailController.text.trim(),
+      password: passwordController.text.trim(),
+      score: 0,
+    );
+    if (!_frmkey.currentState!.validate()) {
+      showFailureDialog();
+    } else {
+      try {
+        await _user.createUser(user);
+      } on SignUp_AccountFailure catch (e) {
+        showFailureDialog(message: e.message);
+      } catch (_) {
+        showFailureDialog();
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -128,41 +134,6 @@ class _SignUpState extends State<SignUp> with SingleTickerProviderStateMixin {
                       validator: (nameController) {
                         if (nameController!.isEmpty) {
                           return 'Vui lòng nhập Họ Tên';
-                        }
-                        return null;
-                      },
-                      autovalidateMode: AutovalidateMode.onUserInteraction,
-                    ),
-                    const SizedBox(height: 20.0),
-                    TextFormField(
-                      style: const TextStyle(
-                        color: Color(0xFF0597F2),
-                        fontSize: 18,
-                      ),
-                      controller: addressController,
-                      keyboardType: TextInputType.emailAddress,
-                      decoration: InputDecoration(
-                        labelText: "Địa chỉ",
-                        fillColor: Colors.white,
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10.0),
-                          borderSide: const BorderSide(
-                            color: Color(0xFFADDDFF),
-                          ),
-                        ),
-                        contentPadding: const EdgeInsets.symmetric(
-                            vertical: 12, horizontal: 16),
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10.0),
-                          borderSide: const BorderSide(
-                            color: Colors.grey,
-                            width: 1.0,
-                          ),
-                        ),
-                      ),
-                      validator: (address) {
-                        if (address!.isEmpty) {
-                          return 'Vui lòng nhập địa chỉ';
                         }
                         return null;
                       },
@@ -289,7 +260,12 @@ class _SignUpState extends State<SignUp> with SingleTickerProviderStateMixin {
                   elevation: 5.0,
                   height: 45,
                   minWidth: double.infinity,
-                  onPressed: () {},
+                  onPressed: () {
+                    setState(() {
+                      showProgress = true;
+                    });
+                    signUp();
+                  },
                   child: const Text(
                     "Đăng ký",
                     style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700),
@@ -330,116 +306,116 @@ class _SignUpState extends State<SignUp> with SingleTickerProviderStateMixin {
     );
   }
 
-//   Future<void> showDoneDialog() async {
-//     await showDialog(
-//       barrierDismissible: false,
-//       context: context,
-//       builder: (context) => Dialog(
-//         child: Column(
-//           mainAxisSize: MainAxisSize.min,
-//           children: [
-//             Lottie.asset(
-//               'assets/animations/login_successly.json',
-//               repeat: false,
-//               controller: controller,
-//               onLoaded: (composition) {
-//                 controller.duration = composition.duration;
-//                 controller.forward();
-//               },
-//             ),
-//             const Text(
-//               "Đăng ký thành công",
-//               style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.w800),
-//             ),
-//             const SizedBox(height: 16.0),
-//           ],
-//         ),
-//       ),
-//     );
-//   }
+  Future<void> showDoneDialog() async {
+    await showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder: (context) => Dialog(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Lottie.asset(
+              'assets/animations/login_successly.json',
+              repeat: false,
+              controller: controller,
+              onLoaded: (composition) {
+                controller.duration = composition.duration;
+                controller.forward();
+              },
+            ),
+            const Text(
+              "Đăng ký thành công",
+              style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.w800),
+            ),
+            const SizedBox(height: 16.0),
+          ],
+        ),
+      ),
+    );
+  }
 
-//   Future<void> showFailureDialog({String? message}) async {
-//     await showDialog(
-//       barrierDismissible: false,
-//       context: context,
-//       builder: (context) => Dialog(
-//         child: Column(
-//           mainAxisSize: MainAxisSize.min,
-//           children: [
-//             Lottie.asset(
-//               'assets/animations/login_failure.json',
-//               repeat: false,
-//               controller: controller,
-//               onLoaded: (composition) {
-//                 controller.duration = composition.duration;
-//                 controller.forward();
-//               },
-//             ),
-//             Text(
-//               message ?? "Đăng ký thất bại",
-//               style:
-//                   const TextStyle(fontSize: 16.0, fontWeight: FontWeight.w800),
-//             ),
-//             const SizedBox(height: 16.0),
-//           ],
-//         ),
-//       ),
-//     );
-//   }
+  Future<void> showFailureDialog({String? message}) async {
+    await showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder: (context) => Dialog(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Lottie.asset(
+              'assets/animations/login_failure.json',
+              repeat: false,
+              controller: controller,
+              onLoaded: (composition) {
+                controller.duration = composition.duration;
+                controller.forward();
+              },
+            ),
+            Text(
+              message ?? "Đăng ký thất bại",
+              style:
+                  const TextStyle(fontSize: 16.0, fontWeight: FontWeight.w800),
+            ),
+            const SizedBox(height: 16.0),
+          ],
+        ),
+      ),
+    );
+  }
 
-//   Future<void> showCheckBoxDialog() async {
-//     await showDialog(
-//       barrierDismissible: false,
-//       context: context,
-//       builder: (context) => Dialog(
-//         child: Column(
-//           mainAxisSize: MainAxisSize.min,
-//           children: [
-//             Lottie.asset(
-//               'assets/animations/checkbox.json',
-//               repeat: false,
-//               controller: controller,
-//               onLoaded: (composition) {
-//                 controller.duration = composition.duration;
-//                 controller.forward();
-//               },
-//             ),
-//             const Text(
-//               "Vui lòng chọn Đồng ý",
-//               style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.w800),
-//             ),
-//             const SizedBox(height: 16.0),
-//           ],
-//         ),
-//       ),
-//     );
-//   }
+  Future<void> showCheckBoxDialog() async {
+    await showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder: (context) => Dialog(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Lottie.asset(
+              'assets/animations/checkbox.json',
+              repeat: false,
+              controller: controller,
+              onLoaded: (composition) {
+                controller.duration = composition.duration;
+                controller.forward();
+              },
+            ),
+            const Text(
+              "Vui lòng chọn Đồng ý",
+              style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.w800),
+            ),
+            const SizedBox(height: 16.0),
+          ],
+        ),
+      ),
+    );
+  }
 
-//   Future<void> showCheckExistDialog() async {
-//     await showDialog(
-//       barrierDismissible: false,
-//       context: context,
-//       builder: (context) => Dialog(
-//         child: Column(
-//           mainAxisSize: MainAxisSize.min,
-//           children: [
-//             Lottie.asset(
-//               'assets/animations/failure.json',
-//               repeat: false,
-//               controller: controller,
-//               onLoaded: (composition) {
-//                 controller.duration = composition.duration;
-//                 controller.forward();
-//               },
-//             ),
-//             const Text(
-//               "Tài khoản đã tồn tại",
-//               style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.w800),
-//             ),
-//             const SizedBox(height: 16.0),
-//           ],
-//         ),
-//       ),
-//     );
-//   }
+  Future<void> showCheckExistDialog() async {
+    await showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder: (context) => Dialog(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Lottie.asset(
+              'assets/animations/failure.json',
+              repeat: false,
+              controller: controller,
+              onLoaded: (composition) {
+                controller.duration = composition.duration;
+                controller.forward();
+              },
+            ),
+            const Text(
+              "Tài khoản đã tồn tại",
+              style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.w800),
+            ),
+            const SizedBox(height: 16.0),
+          ],
+        ),
+      ),
+    );
+  }
 }

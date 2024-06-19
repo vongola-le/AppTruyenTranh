@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import '../models/User.dart';
+import '../models/user.dart';
 
 class ItemRanking extends StatefulWidget {
   ItemRanking({super.key, required this.user});
-  User user;
+  Users user;
   @override
   State<ItemRanking> createState() => _ItemRankingState();
 }
@@ -30,13 +30,13 @@ class _ItemRankingState extends State<ItemRanking> {
               CircleAvatar(
                 backgroundColor: Colors.grey.shade200,
                 backgroundImage:
-                    AssetImage(widget.user.imageUrl),
+                    AssetImage(widget.user.imageUrl!),
               ),
 
               // Username
               Padding(
                 padding: const EdgeInsets.only(left: 12.0),
-                child: Text(widget.user.name),
+                child: Text(widget.user.name!),
               ),
             ],
           ),
