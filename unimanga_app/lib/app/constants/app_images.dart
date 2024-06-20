@@ -53,6 +53,11 @@ class AppImages {
   static const String icEmailLock = 'assets/images/icons/ic_email_lock.svg';
   static const String icDiscount = 'assets/images/icons/ic_discount.svg';
   static const String icBell = 'assets/images/icons/ic_bell.svg';
+  static const String icAction = 'assets/images/icons/iconaction.png'; 
+  static const String icFantasy = 'assets/images/icons/iconfantasy.png';
+  static const String icAdventure = 'assets/images/icons/icadventure.png';
+  static const String icChapFree = 'assets/images/icons/iconfree.png';
+  static const String icChapVip = 'assets/images/icons/iconvipcard.png';
   //logo
   static const String icLogoAppBig = 'assets/images/logo/logo-unimanga_big.png';
   static const String icnew = 'assets/images/logo/new.png';
@@ -65,7 +70,11 @@ class AppImages {
   static const String icLogoGreen = 'assets/images/logo/logoGreen.png';
   static const String icLogoText = 'assets/images/logo/logo_text.png';
   static const String icLogoTitle = 'assets/images/logo/logo_title.png';
+  
     //background
+  static const String imgTest2= 'assets/images/background/6.jpg';
+  static const String imgTest1= 'assets/images/background/5.jpg';
+  static const String imgTest= 'assets/images/background/4.jpg';
   static const String demonslayder= 'assets/images/background/demonslayder.jpg';
   static const String hinhnentruyen3= 'assets/images/background/hinhnentruyen3.jpg';
   static const String hinhnentruyen2= 'assets/images/background/hinhnentruyen2.jpg';

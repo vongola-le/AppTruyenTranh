@@ -1,8 +1,8 @@
 
 import 'package:get/get.dart';
-import 'package:unimanga_app/app/modules/category/controllers/dashboard_controllers.dart';
-import 'package:unimanga_app/app/modules/category/provider/dashboard_provider.dart';
-import 'package:unimanga_app/app/modules/category/repository/dashboard_repository.dart';
+import 'package:unimanga_app/app/modules/category/controllers/category_controllers.dart';
+import 'package:unimanga_app/app/modules/category/provider/category_provider.dart';
+import 'package:unimanga_app/app/modules/category/repository/category_repository.dart';
 
 class DashBoardBinding extends Bindings {
   @override

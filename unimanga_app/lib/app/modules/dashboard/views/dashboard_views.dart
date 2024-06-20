@@ -3,6 +3,11 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:unimanga_app/app/global_widgets/comic_items.dart';
+import 'package:unimanga_app/app/modules/category/bindings/category_binding.dart';
+import 'package:unimanga_app/app/modules/dashboard/bindings/dashboard_bindings.dart';
+import 'package:unimanga_app/app/modules/dashboard/controllers/dashboard_controllers.dart';
+import 'package:unimanga_app/app/modules/dashboard/views/Dashboard_child/list_comic_action.dart';
+import 'package:unimanga_app/app/modules/dashboard/views/Dashboard_child/list_comic_hot.dart';
 import 'package:unimanga_app/app/modules/infor_user/views/Info.dart';
 import '../../../constants/index.dart';
 import '../../../global_widgets/index.dart';
@@ -12,9 +17,10 @@ double sizefix( double size , double screen){
    return Sizefix.sizefix(size, screen);
 }
 
-class DashboardView extends GetView{
+class DashboardView extends GetView<DashboardController>{
   @override
   Widget build(BuildContext context){
+    DashBoardBinding().dependencies();
     final double screenWidth = MediaQuery.of(context).size.width;
     final double screenHeight = MediaQuery.of(context).size.height;
      return Scaffold(
@@ -135,29 +141,13 @@ class DashboardView extends GetView{
                      ),
                   ],),
                   SizedBox(height: sizefix(20, screenHeight),),
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                       SizedBox(
-                          height: sizefix(22, screenHeight),
-                          width: sizefix(22, screenHeight),
-                          child: Image.asset(AppImages.icLogohot),
-                        ),
-                      TextCustom(text: "Truyện đề cử", fontWeight: FontWeight.bold, color: AppColors.black, fontsize: sizefix(15, screenWidth),),
-                    ],
-                  ),
+                  //Truyện đề cử
+                  ListComicHotView(screenHeight: screenHeight, screenWidth: screenWidth),
+
                   SizedBox(height: sizefix(15, screenHeight),),
-                  SizedBox(
-                    height: sizefix(210, screenHeight),
-                    child: ListView.builder(
-                      scrollDirection: Axis.horizontal,
-                      itemCount: 3,
-                      itemBuilder: (context, index) => Padding(
-                        padding: EdgeInsets.only(right: sizefix(10, screenWidth), bottom: sizefix(24, screenHeight),top: sizefix(2, screenHeight),),
-                        child: const ComicItem(),
-                      ),
-                    ),
-                  ),
+                  //Truyện action
+                  ListComicActionView(screenHeight: screenHeight, screenWidth: screenWidth),
+                  
                   Row(
                       children: [
                          SizedBox(
@@ -191,7 +181,48 @@ class DashboardView extends GetView{
   }
   
 }
+class ListComicHot extends GetView<DashboardController>{
+  @override
+  Widget build(BuildContext context){
+    DashBoardBindings().dependencies();
+    return Obx(() {
+      var listComicHot = controller.listcomic.value;
+      return Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          for(int i = 0; i< listComicHot.length; i++)
+            Padding(
+              padding: const EdgeInsets.only(right: 4),
+              child: ComicItems(comic: listComicHot[i],),
+            )
+        ],
+      );
+    });
+  }
+}
 
+class ListComicAction extends GetView<DashboardController>{
+  @override
+  Widget build(BuildContext context){
+    DashBoardBindings().dependencies();
+    return Obx(() {
+      var listComicAction = controller.listcomicAction.value;
+      return Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          for(int i = 0; i< listComicAction.length; i++)
+            Padding(
+              padding: const EdgeInsets.only(right: 4),
+              child: ComicItems(comic: listComicAction[i],),
+            )
+        ],
+      );
+    });
+  }
+}
+// ignore: camel_case_types
 class carouseu extends StatefulWidget {
   // ignore: prefer_typing_uninitialized_variables
   final screenWidth;
@@ -220,10 +251,9 @@ class _carouseuState extends State<carouseu> {
         Container(
           child: ClipRRect(
             borderRadius: BorderRadius.circular(sizefix(5, widget.screenWidth)),
-            child: Image.asset(AppImages.kaisen, fit: BoxFit.cover,),
+            child: Image.asset(AppImages.BgAppbarDashboard, fit: BoxFit.cover,),
           ),
         ),
-       
       ],
       options: CarouselOptions(
         height: sizefix(177, widget.screenHeight),

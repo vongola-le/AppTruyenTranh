@@ -1,6 +1,10 @@
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/get_state_manager/src/simple/get_view.dart';
 import 'package:unimanga_app/app/global_widgets/index.dart';
+import 'package:unimanga_app/app/models/comic_model.dart';
+import 'package:unimanga_app/app/modules/comic_detail/views/detail_child/chappter_page.dart';
 import 'package:unimanga_app/app/modules/comic_detail/views/detail_child/detail_page.dart';
 import '../../../constants/index.dart';
 
@@ -8,13 +12,11 @@ import '../../../constants/index.dart';
 double sizefix( double size , double screen){
    return Sizefix.sizefix(size, screen);
 }
-class ComicDetail extends StatefulWidget {
-  const ComicDetail({super.key});
+class ComicDetail extends GetView {
+  final ComicModel comic;
 
-  @override
-  State<ComicDetail> createState() => _ComicDetailState();
-}
-class _ComicDetailState extends State<ComicDetail> {
+  ComicDetail({required this.comic});
+
   @override
   Widget build(BuildContext context) {
     final double screenWidth = MediaQuery.of(context).size.width;
@@ -30,7 +32,13 @@ class _ComicDetailState extends State<ComicDetail> {
                 return <Widget>[
                   SliverAppBar(
                     backgroundColor: AppColors.lightWhite,
-                    title: TextCustom(text: "Thanh gươm diệt quỷ", color: Colors.white.withOpacity(0.1),),
+                    leading: GestureDetector(
+                       onTap: () => Get.back(),
+                      child: Padding(
+                        padding: EdgeInsets.only(bottom: sizefix(32, screenHeight)),
+                        child: Icon(Icons.arrow_back_ios_new, color:  AppColors.lightWhite,),
+                      ),
+                    ),
                     expandedHeight:sizefix(300, screenHeight), // Chiều cao ban đầu của SliverAppBar
                     floating: true,
                     pinned: true, // Giữ AppBar luôn hiển thị
@@ -41,9 +49,9 @@ class _ComicDetailState extends State<ComicDetail> {
                             children: [
                               Container(
                                 height: sizefix(180, screenHeight),
-                                decoration: const BoxDecoration(
+                                decoration: BoxDecoration(
                                   image: DecorationImage(
-                                    image: AssetImage(AppImages.demonslayder),
+                                    image: NetworkImage(comic.anhBiaTruyen!),
                                     fit: BoxFit.fitWidth,
                                   ),
                                 ),
@@ -75,13 +83,13 @@ class _ComicDetailState extends State<ComicDetail> {
                                     children: [
                                       Column(
                                         children: [
-                                          TextCustom(text: "480k", fontsize: sizefix(20, screenWidth),fontWeight: FontWeight.bold,),
+                                          TextCustom(text: comic.luotDanhGia, fontsize: sizefix(20, screenWidth),fontWeight: FontWeight.bold,),
                                           TextCustom(text: "Số like", color: Colors.grey, fontsize: sizefix(10, screenWidth),)
                                         ],
                                       ),
                                       Column(
                                         children: [
-                                          TextCustom(text: "480k", fontsize: sizefix(20, screenWidth),fontWeight: FontWeight.bold,),
+                                          TextCustom(text: comic.luotXem, fontsize: sizefix(20, screenWidth),fontWeight: FontWeight.bold,),
                                           TextCustom(text: "Độ hot", color: Colors.grey, fontsize: sizefix(10, screenWidth),)
                                         ],
                                       ),
@@ -92,7 +100,7 @@ class _ComicDetailState extends State<ComicDetail> {
                                             mainAxisAlignment: MainAxisAlignment.center,
                                             crossAxisAlignment: CrossAxisAlignment.center,
                                             children: [
-                                              TextCustom(text: "4.7", fontsize: sizefix(20, screenWidth),fontWeight: FontWeight.bold,),
+                                              TextCustom(text: comic.diemDanhGia, fontsize: sizefix(20, screenWidth),fontWeight: FontWeight.bold,),
                                               Icon(Icons.star_rate_rounded, color: AppColors.yellowPrimary, size: sizefix(20, screenWidth),)                                       
                                             ],
                                           ),
@@ -134,32 +142,30 @@ class _ComicDetailState extends State<ComicDetail> {
               },
               body: TabBarView(
                 children: [
-                  DetailPage(),
-                  Center(child: Text('Nội dung của tab Chappter')),
+                  DetailPage(comics: comic,),
+                  ChappterPage(screenHeight: screenHeight, screenWidth: screenWidth, comic: comic,)
                 ],
               ),
             ),
           ),
+          bottomNavigationBar: Container(
+            alignment: Alignment.center ,
+            height: sizefix(50, screenHeight),
+            child: Container(
+              alignment: Alignment.center,
+              height: sizefix(40, screenHeight),
+              width: sizefix(300, screenWidth), 
+              decoration: BoxDecoration(
+                color: AppColors.RedPrimary,
+                borderRadius: BorderRadius.circular(sizefix(20, screenWidth))
+              ), 
+              child:  TextCustom(
+                text: "Bắt đầu đọc", color: AppColors.lightWhite, fontsize: sizefix(15, screenHeight), fontWeight: FontWeight.bold,)
+              ),
+          )
         ),
       ),
     );
   }
 }
 
-// class ComicDetail extends GetView{
-//   @override
-//    Widget build(BuildContext context){ 
-//     return DefaultTabController(
-//       length: 2, 
-//       child: Scaffold(
-//         appBar: AppBar(
-//           title: TextCustom(text: "Chi tiết truyện"),
-//           bottom: const PreferredSize(
-//             preferredSize: Size.fromHeight(sizefix(30, )), 
-//             child: child),
-//         ),
-        
-//       )
-//     );
-//    }
-// }

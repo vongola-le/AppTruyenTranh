@@ -14,7 +14,7 @@ class categoryComicModel{
   }
   Map<String, dynamic> toMap(){
     return {
-    "Id": id,
+    "id": id,
     "TenTheLoai": tenTheLoai,
     };
   }
