@@ -15,4 +15,10 @@ static double sizefix(double size, double screen) {
   double result = screen * percentage;
   return result;
 }
+static double sizefixall(double size, double screenWidth, double screenHeight) {
+  double screen = (screenWidth + screenHeight) / 2;
+  double percentage = size / 375.0; // 375.0 là kích thước chuẩn mà bạn đã thiết kế
+  double result = screen * percentage;
+  return result;
+}
 }
