@@ -27,7 +27,7 @@ class _Login_ScreenState extends State<Login_Screen>
     with SingleTickerProviderStateMixin {
   final _frmkey = GlobalKey<FormState>();
 
-  final _user = Get.find<SigninProvider>();
+  final _user = Get.put(SigninProvider());
   final TextEditingController nameController = new TextEditingController();
   final TextEditingController addressController = new TextEditingController();
   final TextEditingController emailController = new TextEditingController();

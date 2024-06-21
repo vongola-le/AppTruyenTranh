@@ -25,7 +25,8 @@ class _SignUpState extends State<SignUp> with SingleTickerProviderStateMixin {
   final _frmkey = GlobalKey<FormState>();
 
 
-  final _user = Get.find<SignupProvider>();
+
+  final _user = Get.put(SignupProvider());
   final TextEditingController nameController = new TextEditingController();
   final TextEditingController addressController = new TextEditingController();
   final TextEditingController emailController = new TextEditingController();

@@ -8,10 +8,10 @@ import '../repository/signin_repository.dart';
 
 
 class LoginController extends GetxController {
-  LoginController({required this.provider});
-  final SigninRepository  provider;
+  static LoginController get instance => Get.find();
 
+  final authRepo = Get.put(SigninRepository());
   Future<void> loginAccount(Users user) async {
-    await provider.loginUser(user);
+    await authRepo.loginAccount(user);
   }
 }

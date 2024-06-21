@@ -6,6 +6,18 @@ import 'package:unimanga_app/app/modules/signup/provider/signup_provider.dart';
 import 'package:unimanga_app/app/modules/signup/views/SignUp.dart';
 import '../../signin/repository/signin_repository.dart';
 
+
+class SignupRepository extends GetxController {
+  static SignupRepository get instance => Get.find();
+  // SignupRepository({required this.signupReponsitory});
+  // final SignupProvider signupReponsitory;
+    final authRepo = Get.put(SignupProvider());
+   Future<void> createUser(Users user) async {
+    await authRepo.createUser(user);
+  }
+
+}
+
 // class SignupRepository extends GetxController {
 //   static Auth_Resposity get instance => Get.find();
 
@@ -40,12 +52,3 @@ import '../../signin/repository/signin_repository.dart';
 //     } catch (_) {}
 //   }
 // }
-class SignupRepository{
-  SignupRepository({required this.signupReponsitory});
-  final SignupProvider signupReponsitory;
-
-   Future<void> createUser(Users user) async {
-    await signupReponsitory.createUser(user);
-  }
-
-}

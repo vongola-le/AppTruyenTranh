@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
+import 'package:unimanga_app/app/modules/signin/provider/signin_provider.dart';
 import '../../../models/user.dart';
 import 'signup_failer.dart';
 
@@ -56,7 +57,8 @@ import 'signup_failer.dart';
 //     return userData;
 //   }
 // }
-class SignupProvider {
+class SignupProvider extends GetxController {
+  static SigninProvider get instance => Get.find();
   final _auth = FirebaseAuth.instance;
   final _db = FirebaseFirestore.instance;
   // Tạo user

@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
 class FilterScreen extends StatefulWidget {
-  const FilterScreen ({super.key});
+  const FilterScreen({super.key, required void Function(List<int> selectedCategories) onCategorySelected});
 
   @override
-  State<FilterScreen> createState() => _InfoScreenState();
+  State<FilterScreen> createState() => _FilterScreenState();
 }
 
-class _InfoScreenState extends State<FilterScreen> {
+class _FilterScreenState extends State<FilterScreen> {
   List<String> statusOptions = ['Tất cả', 'Đang ra', 'Hoàn thành'];
   List<String> sortOptions = ['Ngày cập nhật', 'Lượt xem', 'Truyện mới'];
   final List<String> categories = [
@@ -25,7 +25,23 @@ class _InfoScreenState extends State<FilterScreen> {
     'Adventure',
   ];
   String selectedStatus = 'Tất cả';
+  List<String> selectedCategories = [];
   int _selectedIndex = -1;
+  void _onCategorySelected(int index) {
+    setState(() {
+      if (_selectedIndex == index) {
+        _selectedIndex = -1;
+        selectedCategories.remove(categories[index]);
+      } else {
+        _selectedIndex = index;
+        selectedCategories.add(categories[index]);
+      }
+    });
+
+    // Notify list_manga.dart about the change in selectedCategories
+    Navigator.of(context).pop(selectedCategories);
+  }
+
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -107,14 +123,9 @@ class _InfoScreenState extends State<FilterScreen> {
                               selectedStatus = status;
                             });
 
-                            // Handle button press for the specific status
                             if (status == 'Ngày cập nhật') {
-                              // All status button pressed
                             } else if (status == 'Lượt xem') {
-                              // In Progress status button pressed
-                            } else if (status == 'Truyện mới') {
-                              // Completed status button pressed
-                            }
+                            } else if (status == 'Truyện mới') {}
                           },
                           child: Text(status),
                         ),
@@ -135,9 +146,7 @@ class _InfoScreenState extends State<FilterScreen> {
                             title: Text(categories[i]),
                             value: _selectedIndex == i,
                             onChanged: (bool? value) {
-                              setState(() {
-                                _selectedIndex = value ?? false ? i : -1;
-                              });
+                              _onCategorySelected(i);
                             },
                             activeColor: Colors.blueAccent,
                             controlAffinity: ListTileControlAffinity.leading,
@@ -146,12 +155,10 @@ class _InfoScreenState extends State<FilterScreen> {
                         if (i + 1 < categories.length)
                           Expanded(
                             child: CheckboxListTile(
-                              title: Text(categories[i + 1]),
-                              value: _selectedIndex == i + 1,
+                              title: Text(categories[i]),
+                              value: _selectedIndex == i,
                               onChanged: (bool? value) {
-                                setState(() {
-                                  _selectedIndex = value ?? false ? i + 1 : -1;
-                                });
+                                _onCategorySelected(i);
                               },
                               activeColor: Colors.blueAccent,
                               controlAffinity: ListTileControlAffinity.leading,

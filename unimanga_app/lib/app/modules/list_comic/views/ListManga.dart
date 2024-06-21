@@ -14,72 +14,72 @@ class ListManga extends StatefulWidget {
 
 class _ListMangaState extends State<ListManga> {
   List<ComicModel> lstManga = [
-   ComicModel(
-  id: '1234567890',
-  anhTruyen: 'https://example.com/comic-cover.jpg',
-  anhBiaTruyen: 'https://example.com/comic-banner.jpg',
-  tacGia: 'Jane Doe',
-  tinhTrang: 'Ongoing',
-  luotTheoDoi: '50000',
-  luotDanhGia: '10000',
-  diemDanhGia: '4.8',
-  ten: 'The Adventures of Super Hero',
-  luotXem: '500000',
-  soChuong: '100',
-  chapComicModel: [
-    ChapComicModel(
-      id: '1',
-      tenChuong: 'Chapter 1',
-      loaiChuong: 'Free',
-      thoiGianCapNhat: '2023-06-01',
-      imageChap: [
-        ImageChap(
-          id: '1',
-          url: 'https://example.com/chapter1-page1.jpg'
-        ),
-        ImageChap(
-          id: '2',
-          url: 'https://example.com/chapter1-page2.jpg'
-        ),
-        ImageChap(
-          id: '3',
-          url: 'https://example.com/chapter1-page3.jpg'
-        )
-      ]
-    ),
-    ChapComicModel(
-      id: '2',
-      tenChuong: 'Chapter 2',
-      loaiChuong: 'Premium',
-      thoiGianCapNhat: '2023-06-15',
-      imageChap: [
-        ImageChap(
-          id: '1',
-          url: 'https://example.com/chapter2-page1.jpg'
-        ),
-        ImageChap(
-          id: '2',
-          url: 'https://example.com/chapter2-page2.jpg'
-        ),
-        ImageChap(
-          id: '3',
-          url: 'https://example.com/chapter2-page3.jpg'
-        )
-      ]
-    )
-  ]
-),
+    ComicModel(
+        id: '1234567890',
+        anhTruyen: 'https://example.com/comic-cover.jpg',
+        anhBiaTruyen: 'https://example.com/comic-banner.jpg',
+        tacGia: 'Jane Doe',
+        tinhTrang: 'Ongoing',
+        luotTheoDoi: '50000',
+        luotDanhGia: '10000',
+        diemDanhGia: '4.8',
+        ten: 'The Adventures of Super Hero',
+        luotXem: '500000',
+        soChuong: '100',
+        chapComicModel: [
+          ChapComicModel(
+              id: '1',
+              tenChuong: 'Chapter 1',
+              loaiChuong: 'Comedy',
+              thoiGianCapNhat: '2023-06-01',
+              imageChap: [
+                ImageChap(
+                    id: '1', url: 'https://example.com/chapter1-page1.jpg'),
+                ImageChap(
+                    id: '2', url: 'https://example.com/chapter1-page2.jpg'),
+                ImageChap(
+                    id: '3', url: 'https://example.com/chapter1-page3.jpg')
+              ]),
+          ChapComicModel(
+              id: '2',
+              tenChuong: 'Chapter 2',
+              loaiChuong: 'Premium',
+              thoiGianCapNhat: '2023-06-15',
+              imageChap: [
+                ImageChap(
+                    id: '1', url: 'https://example.com/chapter2-page1.jpg'),
+                ImageChap(
+                    id: '2', url: 'https://example.com/chapter2-page2.jpg'),
+                ImageChap(
+                    id: '3', url: 'https://example.com/chapter2-page3.jpg')
+              ])
+        ]),
   ];
+  List<int> _selectedCategories = [];
+  void _onCategorySelected(List<int> selectedCategories) {
+    setState(() {
+      _selectedCategories = selectedCategories;
+    });
+  }
+
   void _openIconButtonPressed() {
     showModalBottomSheet(
       isScrollControlled: true,
       context: context,
-      builder: (ctx) => FilterScreen(),
+      builder: (ctx) => FilterScreen(onCategorySelected: _onCategorySelected),
     );
   }
 
   @override
   Widget build(BuildContext context) {
+    List<ComicModel> filteredLstManga = lstManga;
+    if (_selectedCategories.isNotEmpty) {
+      filteredLstManga = lstManga.where((manga) {
+        return manga.chapComicModel!
+            .any((chap) => _selectedCategories.contains(chap.loaiChuong));
+      }).toList();
+    }
+
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -120,7 +120,7 @@ class _ListMangaState extends State<ListManga> {
                       style: TextStyle(fontSize: 25),
                     ))
                 : ListView.separated(
-                    itemCount: 10, // Change this to 10
+                    itemCount: 10,
                     separatorBuilder: (context, index) => SizedBox(height: 1),
                     itemBuilder: (context, index) {
                       return ItemManga(
