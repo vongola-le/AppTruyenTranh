@@ -1,76 +1,64 @@
-// import 'package:get/get.dart';
-// import 'package:intern_vua_gao/app/core/cache_manager.dart';
-// import 'package:intern_vua_gao/app/models/categoryproduct_model.dart';
-// import 'package:intern_vua_gao/app/models/product_model.dart';
-// import 'package:intern_vua_gao/app/modules/dashboard/repository/dashboard_repository.dart';
-// import 'package:intern_vua_gao/app/services/global_service.dart';
+import 'dart:async';
+import 'package:get/get.dart';
+import 'package:unimanga_app/app/models/chap_comic.dart';
+import 'package:unimanga_app/app/modules/dashboard/repository/dashboard_repository.dart';
+import '../../../models/comic_model.dart';
 
-// import '../../../services/domain_service.dart';
+class DashboardController extends GetxController {
+  final DashboardReponsitory dashboardReponsitory;
+  //Timer? _timer;
+  DashboardController({required this.dashboardReponsitory});
 
+  void onInit() {
+    super.onInit();
+    fetchComicList();
+    fetchComicListAction('Action');
+  }
 
-// class DashboardController extends GetxController with CacheManager {
-//   final DashboardRepository dashboardRepository;
-//   final globalController = Get.find<GlobalService>();
-//   DashboardController({required this.dashboardRepository});
-//   var listCate = <CategoryProductModel>[].obs;
-//   var listProductSale = <ProductModel>[].obs;
-//   var listProdctAll = <ProductModel>[].obs;
-//   var cachedData;
-//   @override
-//   void onInit() async {
-//     super.onInit();
-//     await cacheRemove(CacheManagerKey.PRODUCT_DETAIL);
-//     print("${await cacheGet(CacheManagerKey.PRODUCT_DETAIL)}");
-//     print("ID cua nguoi dung ${globalController.userId.value}");
-//     fetchCategoryProduct();
-//     fetchProductsSale();
-//     fetchProductsHome();
-    
-//   }
-//   Future<void> fetchCategoryProduct() async {
-//    var cachedData = await cacheGet(CacheManagerKey.LIST_CATEGORY_PRODUCT);
-//     if( cachedData == null){
-//        var response = await dashboardRepository.loadDataBase(CategoryProductModel(act: DomainProvider.HOME, userId:globalController.userId.value));
-//       if (response?.data != null) {
-//         List<dynamic> data = response?.data;
-//         listCate.value = data.map((item) => CategoryProductModel.fromJson(item)).toList();
-//         await cacheSave(CacheManagerKey.LIST_CATEGORY_PRODUCT, response?.data);  
-//       }
-//     }else{
-//       List<dynamic> data = cachedData as List<dynamic>;
-//       listCate.value = data.map((item) => CategoryProductModel.fromJson(item)).toList();
-//     }
-//   }
+  // @override
+  // void onClose() {
+  //   _timer?.cancel();
+  //   super.onClose();
+  // }
+  var listchap = <ImageChap>[].obs;
+  var listcomic = <ComicModel>[].obs;
+  var listcomicAction = <ComicModel>[].obs;
+  var comic  = ComicModel().obs;
+  
+   Future<void> fetchImageChap(String id, String idChap) async {
+    try {
+      List<ImageChap> comics = await dashboardReponsitory.getImageChapComicById(id, idChap);
+      listchap.value = comics;
+    } catch (e) {
+      print('Error fetching categories: $e');
+    }
+  }
+  Future<void> fecchComic(String id) async {
+    try {
+      ComicModel? comics = await dashboardReponsitory.getComicById(id);
+      comic.value = comics!;
+    } catch (e) {
+      print('Error fetching comic: $e');
+    }
+  }
+
+  Future<void> fetchComicList() async {
+    try {
+      List<ComicModel> comics = await dashboardReponsitory.getComicList();
+      listcomic.value = comics;
+    } catch (e) {
+      print('Error fetching categories: $e');
+    }
+  }
+ 
   
 
-//   Future<void> fetchProductsSale() async{
-//     var cachedData = await cacheGet(CacheManagerKey.LIST_PRODUCT_SALE);
-//     if(cachedData == null){
-//     var response = await dashboardRepository.getProductSales(ProductModel(act: DomainProvider.HOME, userId:globalController.userId.value));
-//     if (response?.data != null) {
-//       List<dynamic> data = response?.data;
-//       listProductSale.value = data.map((item) => ProductModel.fromJson(item)).toList();
-//       await cacheSave(CacheManagerKey.LIST_PRODUCT_SALE, response?.data); 
-//     }
-//     }else{
-//        List<dynamic> data = cachedData as List<dynamic>;
-//        listProductSale.value = data.map((item) => ProductModel.fromJson(item)).toList();
-//     }
-//   }
-//   Future<void> fetchProductsHome() async{
-//     var cachedData = await cacheGet(CacheManagerKey.LIST_PRODUCT_HOME);
-//     if(cachedData == null){
-//     var response = await dashboardRepository.getProductsHomes(ProductModel(act: DomainProvider.HOME, userId:globalController.userId.value));
-//     if (response?.data != null) {
-//       List<dynamic> data = response?.data;
-//       listProdctAll.value = data.map((item) => ProductModel.fromJson(item)).toList();
-//       await cacheSave(CacheManagerKey.LIST_PRODUCT_HOME, response?.data); 
-//     }
-//     }else{
-//       List<dynamic> data = cachedData as List<dynamic>;
-//       listProdctAll.value = data.map((item) => ProductModel.fromJson(item)).toList();
-//     }
-//   }
-
-// }
-
+  Future<void> fetchComicListAction(String cate) async {
+    try {
+      List<ComicModel> comics = await dashboardReponsitory.getComicListWithCate(cate);
+      listcomicAction.value = comics;
+    } catch (e) {
+      print('Error fetching categories: $e');
+    }
+  }
+}

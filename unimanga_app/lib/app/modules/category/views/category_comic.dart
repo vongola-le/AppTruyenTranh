@@ -20,7 +20,7 @@ class CategoryComicItem extends GetView{
       padding: EdgeInsets.only(left: sizefix(10, screenWidth), right: sizefix(10, screenWidth)),
       height: sizefix(22, screenHeight),
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(sizefix(4, screenWidth)),
+        borderRadius: BorderRadius.circular(sizefix(10, screenWidth)),
         border: Border.all( color: AppColors.RedPrimary, width: sizefix(1, screenWidth))
       ),
       child: TextCustom(text: cate.tenTheLoai, color: AppColors.RedPrimary, fontsize: sizefix(12, screenWidth),),

@@ -1,17 +1,17 @@
-// import 'package:intern_vua_gao/app/core/base_response.dart';
-// import 'package:intern_vua_gao/app/models/categoryproduct_model.dart';
-// import 'package:intern_vua_gao/app/models/product_model.dart';
-// import 'package:intern_vua_gao/app/modules/dashboard/provider/dashboard_provider.dart';
-// import 'package:intern_vua_gao/app/modules/home/models/home_model.dart';
+import 'package:unimanga_app/app/modules/dashboard/provider/dashboard_provider.dart';
 
-// class DashboardRepository {
-//   DashboardRepository({required this.dashboardProvider});
-//   final DashboardProvider dashboardProvider;
-//   Future<BaseResponse?>getProductSales(ProductModel product) =>
-//       dashboardProvider.getProductsSale(product);
-//   Future<BaseResponse?>getProductsHomes(ProductModel product) =>
-//       dashboardProvider.getProductsHomes(product);
-//   Future<BaseResponse?> loadDataBase(CategoryProductModel cate) =>
-//   dashboardProvider.getCategoryProduct(cate);
-      
-// }
+import '../../../models/chap_comic.dart';
+import '../../../models/comic_model.dart';
+
+class DashboardReponsitory {
+ final DashboardProvider dashboardProvider;
+ DashboardReponsitory({required this.dashboardProvider});
+ Future<List<ComicModel>> getComicList() =>
+  dashboardProvider.getComicListHot();
+ Future<List<ComicModel>> getComicListWithCate(String cate) =>
+  dashboardProvider.getComicListWithCate(cate);
+  Future<ComicModel?> getComicById(String id) =>
+  dashboardProvider.getComicById(id);
+  Future<List<ImageChap>> getImageChapComicById(String id, String idChuong) =>
+    dashboardProvider.getImageChapComicById(id, idChuong);
+}
