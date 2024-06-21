@@ -24,7 +24,7 @@ class Auth_Controller extends GetxController {
 
   _setInitialScreen(User? user) {
     user == null
-        ? Get.offAll(() => const ForgotPassword())
+        ? Get.offAll(() => const Login_Screen())
         : Get.offAll(() => const HomeView());
   }
 
