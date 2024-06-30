@@ -17,14 +17,10 @@ class SignUp extends StatefulWidget {
 
   @override
   State<SignUp> createState() => _SignUpState();
-
-  
 }
 
 class _SignUpState extends State<SignUp> with SingleTickerProviderStateMixin {
   final _frmkey = GlobalKey<FormState>();
-
-
 
   final _user = Get.put(SignupProvider());
   final TextEditingController nameController = new TextEditingController();
@@ -47,19 +43,16 @@ class _SignUpState extends State<SignUp> with SingleTickerProviderStateMixin {
         controller.reset();
       }
     });
-    
   }
 
   @override
   void dispose() {
     controller.dispose();
     super.dispose();
-    
   }
 
   void signUp() async {
     final user = Users(
-      imageUrl: null,
       name: nameController.text.trim(),
       email: emailController.text.trim(),
       password: passwordController.text.trim(),

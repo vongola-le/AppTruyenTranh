@@ -5,7 +5,6 @@ import 'package:unimanga_app/app/modules/signin/provider/signin_provider.dart';
 import '../../../models/user.dart';
 import 'signup_failer.dart';
 
-
 // class SignupProvider extends GetxController {
 //   static SignupProvider get instance => Get.find();
 //   final _auth = FirebaseAuth.instance;
@@ -60,13 +59,13 @@ import 'signup_failer.dart';
 class SignupProvider extends GetxController {
   static SigninProvider get instance => Get.find();
   final _auth = FirebaseAuth.instance;
-  final _db = FirebaseFirestore.instance;
+
   // Tạo user
   createUser(Users user) async {
     try {
       await _auth
           .createUserWithEmailAndPassword(
-              email: user.email, password: user.password.toString())
+              email: user.email!, password: user.password.toString())
           .then((value) => postDetailsToFirestore(user));
     } on FirebaseAuthException catch (e) {
       final ex = SignUp_AccountFailure.code(e.code);
@@ -81,30 +80,16 @@ class SignupProvider extends GetxController {
     var _user = _auth.currentUser;
     CollectionReference usersRef = firebaseFirestore.collection('Users');
 
-   Map<String, dynamic> userData = {
-  'id': user.id,
-  'imageUrl': user.imageUrl,
-  'name': user.name,
-  'email': user.email,
-  'password': user.password,
-  'score': user.score,
-};
+    Map<String, dynamic> userData = {
+      'id': user.id,
+      'imageUrl': user.imageUrl,
+      'name': user.name,
+      'address': user.address,
+      'email': user.email,
+      'password': user.password,
+      'score': user.score,
+    };
 
     await usersRef.doc(_user!.uid).set(userData);
-  }
-
-  // lấy 1 user
-  Future<Users> getUserDetails(String email) async {
-    final snapshot =
-        await _db.collection('Users').where('Email', isEqualTo: email).get();
-    final userData = snapshot.docs.map((e) => Users.fromSnapshot(e)).single;
-    return userData;
-  }
-
-  // lấy tất cả
-  Future<Users> allUser() async {
-    final snapshot = await _db.collection('Users').get();
-    final userData = snapshot.docs.map((e) => Users.fromSnapshot(e)).single;
-    return userData;
   }
 }

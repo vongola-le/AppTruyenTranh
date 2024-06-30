@@ -8,6 +8,8 @@ class DashboardReponsitory {
  DashboardReponsitory({required this.dashboardProvider});
  Future<List<ComicModel>> getComicList() =>
   dashboardProvider.getComicListHot();
+ Future<List<ComicModel>> getFilterComic(String stt) =>
+  dashboardProvider.getFilterComic(stt);
  Future<List<ComicModel>> getComicListWithCate(String cate) =>
   dashboardProvider.getComicListWithCate(cate);
   Future<ComicModel?> getComicById(String id) =>

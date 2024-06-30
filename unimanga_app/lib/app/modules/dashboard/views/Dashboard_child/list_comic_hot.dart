@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:unimanga_app/app/global_widgets/text_custom.dart';
+import 'package:unimanga_app/app/modules/list_comic/views/ListManga.dart';
 import '../../../../constants/app_colors.dart';
 import '../../../../constants/app_images.dart';
 import '../../../../global_widgets/comic_items.dart';
@@ -8,11 +9,12 @@ import '../../bindings/dashboard_bindings.dart';
 import '../../controllers/dashboard_controllers.dart';
 
 class ListComicHotView extends GetView {
-  const ListComicHotView({super.key, required this.screenHeight, required this.screenWidth});
+  const ListComicHotView(
+      {super.key, required this.screenHeight, required this.screenWidth});
   final double screenWidth;
   final double screenHeight;
   @override
-  Widget build(BuildContext context){
+  Widget build(BuildContext context) {
     return Column(
       children: [
         Row(
@@ -35,10 +37,18 @@ class ListComicHotView extends GetView {
               ],
             ),
             SizedBox(
-                  height: sizefix(22, screenHeight),
-                  width: sizefix(22, screenHeight),
-                  child: Icon(Icons.navigate_next, color: AppColors.RedPrimary,),
-                ),
+                height: sizefix(22, screenHeight),
+                width: sizefix(22, screenHeight),
+                child: IconButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => ListManga(),
+                        ),
+                      );
+                    },
+                    icon: Icon(Icons.filter_list))),
           ],
         ),
         SizedBox(height: sizefix(15, screenHeight)),
@@ -51,9 +61,9 @@ class ListComicHotView extends GetView {
   }
 }
 
-class ListComicHot extends GetView<DashboardController>{
+class ListComicHot extends GetView<DashboardController> {
   @override
-  Widget build(BuildContext context){
+  Widget build(BuildContext context) {
     DashBoardBindings().dependencies();
     return Obx(() {
       var listComicHot = controller.listcomic.value;
@@ -61,10 +71,12 @@ class ListComicHot extends GetView<DashboardController>{
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          for(int i = 0; i< listComicHot.length; i++)
+          for (int i = 0; i < listComicHot.length; i++)
             Padding(
               padding: const EdgeInsets.only(right: 0),
-              child: ComicItems(comic: listComicHot[i],),
+              child: ComicItems(
+                comic: listComicHot[i],
+              ),
             )
         ],
       );
