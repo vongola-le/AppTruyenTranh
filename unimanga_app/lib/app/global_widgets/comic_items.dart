@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:unimanga_app/app/constants/app_colors.dart';
@@ -7,8 +8,8 @@ import 'package:unimanga_app/app/models/comic_model.dart';
 import 'package:unimanga_app/app/modules/category/bindings/category_binding.dart';
 import 'package:unimanga_app/app/modules/comic_detail/views/comic_detail.dart';
 import 'package:unimanga_app/app/modules/dashboard/controllers/dashboard_controllers.dart';
-
 import '../constants/app_images.dart';
+import '../modules/services/user_services.dart';
 
 double sizefix( double size , double screen){
    return Sizefix.sizefix(size, screen);
@@ -90,11 +91,17 @@ class ComicItems extends GetView<DashboardController>{
     final double screenHeight = MediaQuery.of(context).size.height;
     final double itemWidth = screenWidth * 0.4;
     final double imageHeight = itemWidth * 0.75;
+    UserService userService = UserService();
+    User? user=FirebaseAuth.instance.currentUser;
+    
     return GestureDetector(
       onTap: () async {
         DashBoardBinding().dependencies();
         await controller.fecchComic(comic.id!);
-        Get.to(() => ComicDetail(comic: comic));
+        Get.to(() => ComicDetail(comic: comic),
+        transition: Transition.rightToLeft,
+        duration: const Duration(milliseconds: 500), 
+        );
       },
       child: Container(
         padding: EdgeInsets.only(

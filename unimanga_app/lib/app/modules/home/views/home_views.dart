@@ -1,11 +1,13 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:unimanga_app/app/constants/index.dart';
+import 'package:unimanga_app/app/modules/book_case/views/book_case_view.dart';
 import 'package:unimanga_app/app/modules/dashboard/views/dashboard_views.dart';
 import 'package:unimanga_app/app/modules/infor_user/views/Info.dart';
 
 class HomeView extends StatefulWidget {
-  const HomeView({super.key});
-
+  HomeView({super.key, this.user});
+  User? user;
   @override
   State<HomeView> createState() => _HomeViewState();
 }
@@ -14,8 +16,8 @@ class _HomeViewState extends State<HomeView> {
   int _selectedIndex = 0;
   static  final List<Widget> _widgetOptions = <Widget>[
     DashboardView(),
-    Text('Item 2'),
-    const InfoScreen(),
+    BookCaseView(),
+    InfoScreen(),
   ];
    void _onItemTapped(int index) {
     setState(() {

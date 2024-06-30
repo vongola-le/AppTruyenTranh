@@ -1,29 +1,29 @@
-
-import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:unimanga_app/app/global_widgets/comic_items.dart';
-import 'package:unimanga_app/app/modules/category/bindings/category_binding.dart';
 import 'package:unimanga_app/app/modules/dashboard/bindings/dashboard_bindings.dart';
 import 'package:unimanga_app/app/modules/dashboard/controllers/dashboard_controllers.dart';
 import 'package:unimanga_app/app/modules/dashboard/views/Dashboard_child/list_comic_action.dart';
 import 'package:unimanga_app/app/modules/dashboard/views/Dashboard_child/list_comic_hot.dart';
+import 'package:unimanga_app/app/modules/infor_user/bindings/info_user_bindings.dart';
+import 'package:unimanga_app/app/modules/infor_user/controllers/info_user_controllers.dart';
 import 'package:unimanga_app/app/modules/infor_user/views/Info.dart';
 import '../../../constants/index.dart';
 import '../../../global_widgets/index.dart';
-
-
+import '../../signin/views/SignIn.dart';
+import 'Dashboard_child/carouseu.dart';
 double sizefix( double size , double screen){
    return Sizefix.sizefix(size, screen);
 }
-
 class DashboardView extends GetView<DashboardController>{
+  const DashboardView({super.key});
   @override
   Widget build(BuildContext context){
-    DashBoardBinding().dependencies();
-    final double screenWidth = MediaQuery.of(context).size.width;
-    final double screenHeight = MediaQuery.of(context).size.height;
-     return Scaffold(
+     DashBoardBindings().dependencies();
+     InforUserbinding().dependencies();final inforUserController = Get.find<InforUserController>();   
+     final double screenWidth = MediaQuery.of(context).size.width;
+     final double screenHeight = MediaQuery.of(context).size.height;
+     return Scaffold(   
       body: SingleChildScrollView(
         child: Column(
           children: [
@@ -38,7 +38,9 @@ class DashboardView extends GetView<DashboardController>{
                   ),
                   ),
                 ),
-                 SizedBox(
+                Obx(() {
+                final user = inforUserController.user.value;
+                 return  SizedBox(
                   height: sizefix(80, screenHeight),
                   child: Padding(
                     padding: const EdgeInsets.only(left: 10, right: 10, top: 10),
@@ -50,7 +52,8 @@ class DashboardView extends GetView<DashboardController>{
                           width: 90,
                           child: Image.asset(AppImages.Logoapp, fit: BoxFit.cover,),
                         ),
-                        SizedBox(
+                        user == null
+                        ?SizedBox(
                           width: 220,
                           height: sizefix(60, screenHeight),
                           child: Padding(
@@ -70,12 +73,11 @@ class DashboardView extends GetView<DashboardController>{
                                   child: 
                                   GestureDetector(
                                   onTap: (){
-                                    Get.to(const InfoScreen());
+                                    Get.to(const Login_Screen());
                                   },
                                     child: TextCustom(text: "Đăng nhập", fontsize: 9, color: AppColors.lightWhite, fontWeight: FontWeight.bold,
                                   )),
-                                ),
-                                
+                                ),                             
                                 Container(
                                   alignment: Alignment.center,
                                   decoration: BoxDecoration(
@@ -91,11 +93,40 @@ class DashboardView extends GetView<DashboardController>{
                               ],
                             ),
                           ),
-                        ),
+                        )
+                        :SizedBox(
+                          width: sizefix(190, screenWidth),
+                          height: sizefix(60, screenHeight),
+                          child: Padding(
+                            padding: const EdgeInsets.only(bottom: 7),
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.end,
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                GestureDetector(
+                                  onTap: () => Get.to(const InfoScreen()),
+                                  child: ClipOval(
+                                    child: Image.network(
+                                     user.imageUrl!.isNotEmpty == true
+                                     ?user.imageUrl!
+                                     :'https://www.clipartkey.com/mpngs/m/93-935185_unknown-character-clipart-png-download-unknown-person-picture.png',
+                                     height: sizefix(32, screenHeight),
+                                     width: sizefix(32, screenWidth),
+                                     fit: BoxFit.cover,               
+                                    ),                               
+                                  ),
+                                ),
+                                Icon(Icons.search, color: AppColors.RedPrimary,),
+                                Icon(Icons.notifications, color: AppColors.RedPrimary,)
+                              ],
+                            ),
+                          ),
+                        )
                       ],
                     ),
                   ),
-                ),
+                );
+                }),
               ],
             ),
             Padding(
@@ -181,98 +212,7 @@ class DashboardView extends GetView<DashboardController>{
   }
   
 }
-class ListComicHot extends GetView<DashboardController>{
-  @override
-  Widget build(BuildContext context){
-    DashBoardBindings().dependencies();
-    return Obx(() {
-      var listComicHot = controller.listcomic.value;
-      return Row(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          for(int i = 0; i< listComicHot.length; i++)
-            Padding(
-              padding: const EdgeInsets.only(right: 4),
-              child: ComicItems(comic: listComicHot[i],),
-            )
-        ],
-      );
-    });
-  }
-}
 
-class ListComicAction extends GetView<DashboardController>{
-  @override
-  Widget build(BuildContext context){
-    DashBoardBindings().dependencies();
-    return Obx(() {
-      var listComicAction = controller.listcomicAction.value;
-      return Row(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          for(int i = 0; i< listComicAction.length; i++)
-            Padding(
-              padding: const EdgeInsets.only(right: 4),
-              child: ComicItems(comic: listComicAction[i],),
-            )
-        ],
-      );
-    });
-  }
-}
-// ignore: camel_case_types
-class carouseu extends StatefulWidget {
-  // ignore: prefer_typing_uninitialized_variables
-  final screenWidth;
-  // ignore: prefer_typing_uninitialized_variables
-  final screenHeight;
-  const carouseu({super.key, required this.screenWidth, required this.screenHeight});
 
-  @override
-  State<carouseu> createState() => _carouseuState();
-}
-
-// ignore: camel_case_types
-class _carouseuState extends State<carouseu> {
-  @override
-  Widget build(BuildContext context) {
-    return CarouselSlider(
-      items: [
-        // ignore: avoid_unnecessary_containers
-        Container(
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(sizefix(5, widget.screenWidth)),
-            child: Image.asset(AppImages.konosuba, fit: BoxFit.contain,),
-          ),
-        ),
-        // ignore: avoid_unnecessary_containers
-        Container(
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(sizefix(5, widget.screenWidth)),
-            child: Image.asset(AppImages.BgAppbarDashboard, fit: BoxFit.cover,),
-          ),
-        ),
-      ],
-      options: CarouselOptions(
-        height: sizefix(177, widget.screenHeight),
-        aspectRatio: 16 / 9,
-        viewportFraction: 1.0,
-        initialPage: 0,
-        enableInfiniteScroll: true,
-        reverse: false,
-        autoPlay: true,
-        autoPlayInterval: const Duration(seconds: 3),
-        autoPlayAnimationDuration: const Duration(milliseconds: 800),
-        autoPlayCurve: Curves.fastOutSlowIn,
-        enlargeCenterPage: true,
-        enlargeFactor: 0.3,
-        onPageChanged: null,
-        scrollDirection: Axis.horizontal,
-      ),
-    );
-  }
-}
 
 

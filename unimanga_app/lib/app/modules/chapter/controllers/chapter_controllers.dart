@@ -9,13 +9,15 @@ class ChapterController extends GetxController {
   @override
   void onInit() {
     super.onInit();
+    isUpdated.value = false;
   }
   ChapterController({required this.chapterRepository});
   final ChapterRepository chapterRepository;
-  // Sử dụng RxBool để quản lý trạng thái hiển thị của Container
   var isContainerVisible = true.obs;
+  var isUpdated = false.obs;
+  var isUpdateLockChap = false.obs;
+  var isFetching = false.obs;
 
-  // Phương thức để chuyển đổi trạng thái hiển thị
   void toggleContainerVisibility() {
     isContainerVisible.value = !isContainerVisible.value;
   }

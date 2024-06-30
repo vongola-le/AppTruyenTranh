@@ -1,8 +1,10 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/widgets.dart';
 import 'package:unimanga_app/app/constants/index.dart';
 import 'package:unimanga_app/app/models/comic_model.dart';
 
+import '../../../models/User.dart';
 import '../../../models/chap_comic.dart';
 
 class DashboardProvider {
@@ -74,4 +76,19 @@ Future<List<ComicModel>> getComicListWithCate(String cate) async {
     return [];
   }
 }
+final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+ Future<Users?> getUserByUid(String uid) async {
+    try {
+      DocumentSnapshot<Map<String, dynamic>> documentSnapshot = await _firestore.collection('Users').doc(uid).get();
+      if (documentSnapshot.exists) {
+        return Users.fromSnapshot(documentSnapshot);
+      } else {
+        print('User not found');
+        return null;
+      }
+    } catch (e) {
+      print('Error getting user data: $e');
+      return null;
+    }
+  }
 }

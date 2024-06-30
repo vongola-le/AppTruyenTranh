@@ -1,8 +1,17 @@
-import 'dart:math';
-//import 'package:firebase_auth/firebase_auth.dart';
+//import 'package:firebase_auth/firebase_auth.dart';';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:lottie/lottie.dart';
 import 'package:unimanga_app/app/constants/index.dart';
+import 'package:unimanga_app/app/modules/dashboard/views/dashboard_views.dart';
 import 'package:unimanga_app/app/modules/home/views/home_views.dart';
+import 'package:unimanga_app/app/modules/infor_user/bindings/info_user_bindings.dart';
+import 'package:unimanga_app/app/modules/infor_user/controllers/info_user_controllers.dart';
+import 'package:unimanga_app/app/modules/signin/provider/signin_provider.dart';
+import '../../../models/user.dart';
+import '../../signup/provider/signup_failer.dart';
+import '../../signup/views/SignUp.dart';
+import '../../update_pass/views/VerifiedScreen.dart';
 
 //import 'SignUp.dart';
 
@@ -13,16 +22,60 @@ class Login_Screen extends StatefulWidget {
   State<Login_Screen> createState() => _Login_ScreenState();
 }
 
-class _Login_ScreenState extends State<Login_Screen> {
+class _Login_ScreenState extends State<Login_Screen>
+  with SingleTickerProviderStateMixin {
   final _frmkey = GlobalKey<FormState>();
-  // final _user = Get.put(UserController());
+  final _user = Get.put(SigninProvider());
   final TextEditingController nameController = new TextEditingController();
   final TextEditingController addressController = new TextEditingController();
   final TextEditingController emailController = new TextEditingController();
   final TextEditingController passwordController = new TextEditingController();
 
+  late AnimationController controller;
+  bool showProgress = false;
+  @override
+  void initState() {
+    super.initState();
+    controller =
+        AnimationController(duration: const Duration(seconds: 3), vsync: this);
+    controller.addStatusListener((status) async {
+      if (status == AnimationStatus.completed) {
+        Navigator.pop(context);
+        controller.reset();
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
+  }
+
+  void _signIn() async {
+    final user = Users(
+      email: emailController.text.trim(),
+      password: passwordController.text.trim(),
+    );
+    if (!_frmkey.currentState!.validate()) {
+      showFailureDialog();
+    } else {
+      try {
+        await _user.loginAccount(user);
+        InforUserbinding().dependencies();
+        final inforUserController = Get.find<InforUserController>();
+        inforUserController.user.value = _user.user.value;
+        Get.offAll(() => HomeView());
+      } on SignUp_AccountFailure catch (e) {
+        showFailureDialog(message: e.message);
+      } catch (_) {
+        showFailureDialog();
+      }
+    }
+  }
   @override
   Widget build(BuildContext context) {
+    InforUserbinding().dependencies();
     return Scaffold(
         backgroundColor: Colors.white,
         body: Center(
@@ -126,13 +179,13 @@ class _Login_ScreenState extends State<Login_Screen> {
                   ),
                   const SizedBox(height: 5.0),
                   GestureDetector(
-                    // onTap: () {
-                    //   Navigator.push(
-                    //     context,
-                    //     MaterialPageRoute(
-                    //         builder: (context) => ForgotPassword()),
-                    //   );
-                    // },
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => ForgotPassword()),
+                      );
+                    },
                     child: Container(
                       alignment: Alignment.centerRight,
                       child: Text(
@@ -146,7 +199,7 @@ class _Login_ScreenState extends State<Login_Screen> {
                     padding: const EdgeInsets.symmetric(horizontal: 1.0),
                     child: Center(
                         child: MaterialButton(
-                      shape: RoundedRectangleBorder(
+                      shape: const RoundedRectangleBorder(
                           borderRadius:
                               BorderRadius.all(Radius.circular(20.0))),
                       elevation: 5.0,
@@ -154,11 +207,12 @@ class _Login_ScreenState extends State<Login_Screen> {
                       minWidth: double.infinity,
                       onPressed: () {
                         setState(() {
-                         const HomeView();
+                          showProgress = true;
                         });
-                        const HomeView();
+                        _signIn();
                       },
-                      child: Text(
+                      // ignore: sort_child_properties_last
+                      child: const Text(
                         "Đăng nhập",
                         style: TextStyle(
                             fontSize: 20, fontWeight: FontWeight.w700),
@@ -178,18 +232,19 @@ class _Login_ScreenState extends State<Login_Screen> {
                         ),
                       ),
                       SizedBox(width: 10.0),
-                      // GestureDetector(
-                      //   onTap: () {
-                      //     Navigator.pushReplacement(
-                      //         context,
-                      //         MaterialPageRoute(
-                      //             builder: (context) => const SignUp()));
-                      //   },
-                      //   child: Text(
-                      //     'Đăng ký',
-                      //     style: TextStyle(color: Colors.blue),
-                      //   ),
-                      // )
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => const SignUp()));
+                        },
+                        child: Text(
+                          'Đăng ký',
+                          style: TextStyle(
+                              color: const Color.fromARGB(255, 10, 130, 228)),
+                        ),
+                      )
                     ],
                   ),
                 ],
@@ -197,5 +252,34 @@ class _Login_ScreenState extends State<Login_Screen> {
             ),
           ),
         ));
+  }
+
+  Future<void> showFailureDialog({String? message}) async {
+    await showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder: (context) => Dialog(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Lottie.asset(
+              'assets/animations/login_failure.json',
+              repeat: false,
+              controller: controller,
+              onLoaded: (composition) {
+                controller.duration = composition.duration;
+                controller.forward();
+              },
+            ),
+            Text(
+              message ?? "Đăng nhập thất bại",
+              style:
+                  const TextStyle(fontSize: 16.0, fontWeight: FontWeight.w800),
+            ),
+            const SizedBox(height: 16.0),
+          ],
+        ),
+      ),
+    );
   }
 }

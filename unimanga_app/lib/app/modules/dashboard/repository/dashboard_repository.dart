@@ -1,5 +1,6 @@
 import 'package:unimanga_app/app/modules/dashboard/provider/dashboard_provider.dart';
 
+import '../../../models/User.dart';
 import '../../../models/chap_comic.dart';
 import '../../../models/comic_model.dart';
 
@@ -14,4 +15,6 @@ class DashboardReponsitory {
   dashboardProvider.getComicById(id);
   Future<List<ImageChap>> getImageChapComicById(String id, String idChuong) =>
     dashboardProvider.getImageChapComicById(id, idChuong);
+  Future<Users?> getUserByUid(String uid) =>
+    dashboardProvider.getUserByUid(uid);
 }

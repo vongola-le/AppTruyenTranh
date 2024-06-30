@@ -7,6 +7,7 @@ import 'package:unimanga_app/app/modules/chapter/views/chapter_view.dart';
 
 import '../constants/index.dart';
 import '../models/comic_model.dart';
+import '../modules/chapter/controllers/chapter_controllers.dart';
 import '../modules/dashboard/controllers/dashboard_controllers.dart';
 
 double sizefix( double size , double screen){
@@ -20,23 +21,36 @@ class ChappterItem extends GetView {
   ComicModel? comic;
   @override
   Widget build (BuildContext context){
-
     return  GestureDetector(
       onTap: () async{
+       ChapterBinding().dependencies();
        final dashboardController = Get.find<DashboardController>();
+       final chapterController = Get.find<ChapterController>();
        await dashboardController.fetchImageChap(comic!.id!, chappter.id!);
-       print(dashboardController.listchap.value);
-        Navigator.push(
+       chapterController.isUpdated.value = false;
+       Navigator.push(
           context,
-          MaterialPageRoute(
-            builder: (context) => ChapterView(
+          PageRouteBuilder(
+            transitionDuration: const Duration(milliseconds: 500), 
+            pageBuilder: (context, animation, secondaryAnimation) =>
+             ChapterView(
               screenHeight: screenHeight,
               screenWidth: screenWidth,
               chapComicModel: chappter,
               comic: comic,
             ),
+            transitionsBuilder: (context, animation, secondaryAnimation, child) {
+              const begin = Offset(1.0, 0.0); 
+              const end = Offset.zero; 
+              var tween = Tween(begin: begin, end: end);
+              var slideAnimation = animation.drive(tween);
+              return SlideTransition(
+                position: slideAnimation,
+                child: child,
+              );
+            },
           ),
-        );                      
+        );
       },
       child: Container(
        width: screenWidth,
