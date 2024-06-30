@@ -13,6 +13,7 @@ class DashboardController extends GetxController {
     super.onInit();
     fetchComicList();
     fetchComicListAction('Action');
+    fetchFilteredComics();
   }
 
   // @override
@@ -23,16 +24,38 @@ class DashboardController extends GetxController {
   var listchap = <ImageChap>[].obs;
   var listcomic = <ComicModel>[].obs;
   var listcomicAction = <ComicModel>[].obs;
-  var comic  = ComicModel().obs;
-  
-   Future<void> fetchImageChap(String id, String idChap) async {
+  var comic = ComicModel().obs;
+  final RxInt _selectedChip = 0.obs;
+  int get selectedChip => _selectedChip.value;
+  set selectedChip(int value) {
+    _selectedChip.value = value;
+    fetchFilteredComics();
+  }
+
+  final Rx<List<ComicModel>> _comics = Rx<List<ComicModel>>([]);
+  List<ComicModel> get comics => _comics.value;
+
+  final List<String> statusOptions = ['Tất cả', 'Đang cập nhật', 'Hoàn thành'];
+
+  Future<void> fetchFilteredComics() async {
+    String selectedStatus = statusOptions[selectedChip];
+    if (selectedStatus == 'Tất cả') {
+      _comics.value = await dashboardReponsitory.getComicList();
+    } else {
+      _comics.value = await dashboardReponsitory.getFilterComic(selectedStatus);
+    }
+  }
+
+  Future<void> fetchImageChap(String id, String idChap) async {
     try {
-      List<ImageChap> comics = await dashboardReponsitory.getImageChapComicById(id, idChap);
+      List<ImageChap> comics =
+          await dashboardReponsitory.getImageChapComicById(id, idChap);
       listchap.value = comics;
     } catch (e) {
       print('Error fetching categories: $e');
     }
   }
+
   Future<void> fecchComic(String id) async {
     try {
       ComicModel? comics = await dashboardReponsitory.getComicById(id);
@@ -50,15 +73,16 @@ class DashboardController extends GetxController {
       print('Error fetching categories: $e');
     }
   }
- 
-  
 
   Future<void> fetchComicListAction(String cate) async {
     try {
-      List<ComicModel> comics = await dashboardReponsitory.getComicListWithCate(cate);
+      List<ComicModel> comics =
+          await dashboardReponsitory.getComicListWithCate(cate);
       listcomicAction.value = comics;
     } catch (e) {
       print('Error fetching categories: $e');
     }
   }
+
+  
 }

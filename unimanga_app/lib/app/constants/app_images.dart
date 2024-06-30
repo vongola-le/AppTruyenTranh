@@ -7,11 +7,11 @@ class AppImages {
       'assets/images/icons/cb_active_border.png';
   static const String icCbDisableBorder =
       'assets/images/icons/cb_disable_border.png';
-  static const String icMap = 'assets/images/icons/ic_map.png'; 
-  static const String icLove1 = 'assets/images/icons/love1.png'; 
-  static const String icLove = 'assets/images/icons/love.png'; 
-  static const String icForward = 'assets/images/icons/forward.png'; 
-  static const String icStar = 'assets/images/icons/star.png';   
+  static const String icMap = 'assets/images/icons/ic_map.png';
+  static const String icLove1 = 'assets/images/icons/love1.png';
+  static const String icLove = 'assets/images/icons/love.png';
+  static const String icForward = 'assets/images/icons/forward.png';
+  static const String icStar = 'assets/images/icons/star.png';
   static const String icCheck1 = 'assets/images/icons/check.png';
   static const String icDeliveryTruck = 'assets/images/icons/deliverytruck.png';
   static const String icUndo = 'assets/images/icons/undo.png';
@@ -53,7 +53,7 @@ class AppImages {
   static const String icEmailLock = 'assets/images/icons/ic_email_lock.svg';
   static const String icDiscount = 'assets/images/icons/ic_discount.svg';
   static const String icBell = 'assets/images/icons/ic_bell.svg';
-  static const String icAction = 'assets/images/icons/iconaction.png'; 
+  static const String icAction = 'assets/images/icons/iconaction.png';
   static const String icFantasy = 'assets/images/icons/iconfantasy.png';
   static const String icAdventure = 'assets/images/icons/icadventure.png';
   static const String icChapFree = 'assets/images/icons/iconfree.png';
@@ -65,26 +65,34 @@ class AppImages {
   static const String icLogorankbook = 'assets/images/logo/rankbook.png';
   static const String icLogorankuser = 'assets/images/logo/rankuser.png';
   static const String icLogonewbook = 'assets/images/logo/newbook.png';
-   static const String icLogonewbook1 = 'assets/images/logo/flash.png';
+  static const String icLogonewbook1 = 'assets/images/logo/flash.png';
   static const String icLogo = 'assets/images/logo/logo.png';
   static const String icLogoGreen = 'assets/images/logo/logoGreen.png';
   static const String icLogoText = 'assets/images/logo/logo_text.png';
   static const String icLogoTitle = 'assets/images/logo/logo_title.png';
-  
-    //background
-  static const String imgTest2= 'assets/images/background/6.jpg';
-  static const String imgTest1= 'assets/images/background/5.jpg';
-  static const String imgTest= 'assets/images/background/4.jpg';
-  static const String demonslayder= 'assets/images/background/demonslayder.jpg';
-  static const String hinhnentruyen3= 'assets/images/background/hinhnentruyen3.jpg';
-  static const String hinhnentruyen2= 'assets/images/background/hinhnentruyen2.jpg';
-  static const String hinhnentruyen= 'assets/images/background/hinhnentruyen.jpg';
-  static const String kaisen= 'assets/images/background/jujitsukaisen.jpg';
+
+  //background
+  static const String imgTest2 = 'assets/images/background/6.jpg';
+  static const String imgTest1 = 'assets/images/background/5.jpg';
+  static const String imgTest = 'assets/images/background/4.jpg';
+  static const String demonslayder =
+      'assets/images/background/demonslayder.jpg';
+  static const String hinhnentruyen3 =
+      'assets/images/background/hinhnentruyen3.jpg';
+  static const String hinhnentruyen2 =
+      'assets/images/background/hinhnentruyen2.jpg';
+  static const String hinhnentruyen =
+      'assets/images/background/hinhnentruyen.jpg';
+  static const String kaisen = 'assets/images/background/jujitsukaisen.jpg';
   static const String konosuba = 'assets/images/background/konosuba.png';
   static const String Kaijuno8 = 'assets/images/background/kajuno8.avif';
-  static const String HomeBackGround1 = 'assets/images/background/hinhnentrangchu.jpg';
-  static const String HomeBackGround = 'assets/images/background/trangchuback.jpg';
-  static const String BgAppbarDashboard = 'assets/images/background/Backgroundappbar.png';
-  static const String bannerAdvDasboard = 'assets/images/background/bannerdashboard.png';
+  static const String HomeBackGround1 =
+      'assets/images/background/hinhnentrangchu.jpg';
+  static const String HomeBackGround =
+      'assets/images/background/trangchuback.jpg';
+  static const String BgAppbarDashboard =
+      'assets/images/background/Backgroundappbar.png';
+  static const String bannerAdvDasboard =
+      'assets/images/background/bannerdashboard.png';
+  static const String bgProfile = 'assets/images/background/bg_profile.jpg';
 }
-

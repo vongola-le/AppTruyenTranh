@@ -1,5 +1,8 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
+import 'package:unimanga_app/app/modules/infor_user/views/component/my_profile.dart';
+import 'package:unimanga_app/app/modules/infor_user/views/profile_screen.dart';
 import 'package:unimanga_app/app/modules/list_comic/views/ListManga.dart';
 import 'package:unimanga_app/app/modules/signin/views/signin.dart';
 import 'package:unimanga_app/app/modules/update_pass/views/VerifiedScreen.dart';
@@ -13,7 +16,6 @@ class Auth_Controller extends GetxController {
   final _auth = FirebaseAuth.instance;
 
   late Rx<User?> firebaseUser = Rx<User?>(null);
-  var verificationId = ''.obs;
 
   @override
   void onReady() {
@@ -24,14 +26,14 @@ class Auth_Controller extends GetxController {
 
   _setInitialScreen(User? user) {
     user == null
-        ? Get.offAll(() => const Login_Screen())
+        ? Get.offAll(() => Login_Screen())
         : Get.offAll(() => const HomeView());
   }
 
   loginAccount(Users user) async {
     try {
       await _auth.signInWithEmailAndPassword(
-        email: user.email,
+        email: user.email!,
         password: user.password.toString(),
       );
     } on FirebaseAuthException catch (e) {
