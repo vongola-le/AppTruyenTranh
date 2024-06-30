@@ -8,7 +8,7 @@ import '../../../../global_widgets/index.dart';
 import '../../../../models/chap_comic.dart';
 import '../../../../models/comic_model.dart';
 import '../../../dashboard/controllers/dashboard_controllers.dart';
-import '../../../infor_user/controllers/info_user_controllers.dart';
+import '../../../libary/controllers/info_user_controllers.dart';
 import '../../provider/chapter_provider.dart';
 
 double sizefix(double size, double screen) {

@@ -3,7 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
 import 'package:unimanga_app/app/models/chap_comic.dart';
 import 'package:unimanga_app/app/modules/dashboard/repository/dashboard_repository.dart';
-import '../../../models/User.dart';
+import '../../../models/user.dart';
 import '../../../models/comic_model.dart';
 import '../../home/views/home_views.dart';
 
@@ -31,7 +31,28 @@ class DashboardController extends GetxController {
   var listchap = <ImageChap>[].obs;
   var listcomic = <ComicModel>[].obs;
   var listcomicAction = <ComicModel>[].obs;
-  var comic  = ComicModel().obs;
+  var comic = ComicModel().obs;
+  final RxInt _selectedChip = 0.obs;
+  int get selectedChip => _selectedChip.value;
+  set selectedChip(int value) {
+    _selectedChip.value = value;
+    fetchFilteredComics();
+  }
+
+  final Rx<List<ComicModel>> _comics = Rx<List<ComicModel>>([]);
+  List<ComicModel> get comics => _comics.value;
+
+  final List<String> statusOptions = ['Tất cả', 'Đang cập nhật', 'Hoàn thành'];
+
+  Future<void> fetchFilteredComics() async {
+    String selectedStatus = statusOptions[selectedChip];
+    if (selectedStatus == 'Tất cả') {
+      _comics.value = await dashboardReponsitory.getComicList();
+    } else {
+      _comics.value = await dashboardReponsitory.getFilterComic(selectedStatus);
+    }
+  }
+
   Future<void> fetchUser(String uid) async {
     try {
       Users? fetchedUser = await dashboardReponsitory.getUserByUid(uid);

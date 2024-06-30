@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:unimanga_app/app/constants/index.dart';
 import 'package:unimanga_app/app/modules/book_case/views/book_case_view.dart';
 import 'package:unimanga_app/app/modules/dashboard/views/dashboard_views.dart';
-import 'package:unimanga_app/app/modules/infor_user/views/Info.dart';
+import 'package:unimanga_app/app/modules/infor_user/views/profile_screen.dart';
 
 class HomeView extends StatefulWidget {
   HomeView({super.key, this.user});
@@ -17,7 +17,7 @@ class _HomeViewState extends State<HomeView> {
   static  final List<Widget> _widgetOptions = <Widget>[
     DashboardView(),
     BookCaseView(),
-    InfoScreen(),
+    ProfileScreen(),
   ];
    void _onItemTapped(int index) {
     setState(() {

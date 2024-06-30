@@ -1,6 +1,6 @@
 import 'package:unimanga_app/app/modules/dashboard/provider/dashboard_provider.dart';
 
-import '../../../models/User.dart';
+import '../../../models/user.dart';
 import '../../../models/chap_comic.dart';
 import '../../../models/comic_model.dart';
 

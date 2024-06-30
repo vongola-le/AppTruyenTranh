@@ -4,7 +4,7 @@ import 'package:unimanga_app/app/modules/infor_user/bindings/info_user_bindings.
 import '../../../constants/app_function.dart';
 import '../../../models/chap_comic.dart';
 import '../../../models/comic_model.dart';
-import '../../infor_user/controllers/info_user_controllers.dart';
+import '../../libary/controllers/info_user_controllers.dart';
 
 double sizefix( double size , double screen){
    return Sizefix.sizefix(size, screen);

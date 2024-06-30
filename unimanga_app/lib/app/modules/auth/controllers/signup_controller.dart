@@ -29,7 +29,7 @@ class Auth_Controller extends GetxController {
   loginAccount(Users user) async {
     try {
       await _auth.signInWithEmailAndPassword(
-        email: user.email,
+        email: user.email!,
         password: user.password.toString(),
       );
     } on FirebaseAuthException catch (e) {

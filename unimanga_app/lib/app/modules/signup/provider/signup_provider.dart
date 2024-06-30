@@ -84,8 +84,8 @@ class SignupProvider extends GetxController {
       'id': user.id,
       'imageUrl': user.imageUrl,
       'name': user.name,
-      'address': user.address,
       'email': user.email,
+      'address': user.address,
       'password': user.password,
       'score': user.score,
     };

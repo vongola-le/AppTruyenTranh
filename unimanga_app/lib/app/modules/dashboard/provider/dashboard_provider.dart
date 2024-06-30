@@ -4,7 +4,7 @@ import 'package:flutter/widgets.dart';
 import 'package:unimanga_app/app/constants/index.dart';
 import 'package:unimanga_app/app/models/comic_model.dart';
 
-import '../../../models/User.dart';
+import '../../../models/user.dart';
 import '../../../models/chap_comic.dart';
 
 class DashboardProvider {
@@ -89,6 +89,27 @@ final FirebaseFirestore _firestore = FirebaseFirestore.instance;
     } catch (e) {
       print('Error getting user data: $e');
       return null;
+    }
+  }
+
+  Future<List<ComicModel>> getFilterComic(String stt) async {
+    try {
+      DatabaseReference comicRef =
+          stringFirebase.databaseconnect.ref(stringFirebase.StringHost);
+      DataSnapshot snapshot = (await comicRef.child('Truyen').once()).snapshot;
+      List<ComicModel> comics = [];
+      List<dynamic> values = snapshot.value as List<dynamic>;
+      values.forEach((element) {
+        ComicModel comic =
+            ComicModel.fromJson(element as Map<Object?, Object?>);
+        if (comic.theLoai!.any((theLoai) => theLoai.tenTheLoai == stt)) {
+          comics.add(comic);
+        }
+      });
+      return comics;
+    } catch (e) {
+      print("Error loading comic with cate: $e");
+      return [];
     }
   }
 }

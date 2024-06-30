@@ -47,7 +47,7 @@ class ChappterTop extends GetView<ChapterController> {
             GestureDetector(
               onTap: () {
                 Navigator.popUntil(context, (Route<dynamic> route) => route.isFirst);
-                //controller.isUpdated.value = false;
+                controller.isUpdated.value = false;
               },
               child: Icon(Icons.arrow_back_ios, size: sizefix(15, screenHeight)),
             ),

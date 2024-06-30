@@ -6,10 +6,10 @@ import 'package:unimanga_app/app/modules/dashboard/controllers/dashboard_control
 import 'package:unimanga_app/app/modules/dashboard/views/Dashboard_child/list_comic_action.dart';
 import 'package:unimanga_app/app/modules/dashboard/views/Dashboard_child/list_comic_hot.dart';
 import 'package:unimanga_app/app/modules/infor_user/bindings/info_user_bindings.dart';
-import 'package:unimanga_app/app/modules/infor_user/controllers/info_user_controllers.dart';
-import 'package:unimanga_app/app/modules/infor_user/views/Info.dart';
+import 'package:unimanga_app/app/modules/infor_user/views/profile_screen.dart';
 import '../../../constants/index.dart';
 import '../../../global_widgets/index.dart';
+import '../../libary/controllers/info_user_controllers.dart';
 import '../../signin/views/SignIn.dart';
 import 'Dashboard_child/carouseu.dart';
 double sizefix( double size , double screen){
@@ -104,7 +104,7 @@ class DashboardView extends GetView<DashboardController>{
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: [
                                 GestureDetector(
-                                  onTap: () => Get.to(const InfoScreen()),
+                                  onTap: () => Get.to(const ProfileScreen()),
                                   child: ClipOval(
                                     child: Image.network(
                                      user.imageUrl!.isNotEmpty == true
