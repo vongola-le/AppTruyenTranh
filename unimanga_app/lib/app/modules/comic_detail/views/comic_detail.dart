@@ -132,7 +132,7 @@ class ComicDetail extends GetView {
                           dividerColor: AppColors.lightWhite,
                           tabs: const [
                             Tab(text: 'Chi tiết'),
-                            Tab(text: 'Chappter'),
+                            Tab(text: 'Chương'),
                           ],
                         ),
                       ),
